@@ -646,7 +646,7 @@ if (document.querySelector(".projects-list")) {
       why: "Built to explore low-level systems programming: Linux epoll for async I/O, Operational Transformation for concurrent edits, and a Gap Buffer for efficient text storage — the core ideas behind Google Docs, implemented from scratch.",
       improve: "Add OT-aware undo/redo, multiple file tabs, and explore CRDTs as an alternative to the current centralized OT model.",
       tradeoffs: "Chose OT over CRDTs to keep conflict resolution transparent and auditable — at the cost of requiring a central server.",
-      github: "",
+      github: "https://github.com/Sahej-sethi/collab-editor",
       demo: ""
     },
     {
@@ -658,7 +658,7 @@ if (document.querySelector(".projects-list")) {
       why: "Wanted to explore whether subscription data alone could predict listing performance using proper ML methodology — time-based CV, nested tuning, and zero future leakage.",
       improve: "Incorporate grey market premium (GMP) and expand beyond 333 rows — market signals like Nifty momentum would likely become meaningful at larger scale.",
       tradeoffs: "Chose XGBoost over LightGBM despite lower raw R² — on 333 rows, LightGBM's larger generalization gap (0.068 vs 0.010) makes it the less trustworthy pick.",
-      github: "",
+      github: "https://github.com/Sahej-sethi/nse-ipo-alpha-model",
       demo: ""
     },
         {
@@ -682,7 +682,7 @@ if (document.querySelector(".projects-list")) {
       why: "Wanted to build a complete IoT pipeline from raw sensors to cloud to UI — covering hardware debouncing, dual-core task scheduling, and real-time sync, not just the software layer.",
       improve: "Replace the external MQTT-to-Firebase bridge with a direct connection, and add historical analytics for occupancy trends over time.",
       tradeoffs: "Used dual-sensor (IR + ultrasonic) confirmation instead of a single sensor — adds hardware cost but eliminates false positives from debris or lighting.",
-      github: "",
+      github: "https://github.com/Smart-Parking-IoT-IIIT-H/smart-parking",
       demo: ""
     },
     {
