@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Sahejreet Singh — Computer Science student at IIITH interested in systems programming, performance engineering, and distributed systems.">
+
+    <!-- Font-families -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Monoton&family=Space+Grotesk:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/cf975b0b97.js" crossorigin="anonymous"></script>
+    <title>Sahejreet.Singh</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Boot sequence overlay styles -->
+    <style>
+        /* Preload: pause all animations & hide hero elements until boot finishes */
+        body.preload * {
+            animation-play-state: paused !important;
+        }
+        body.preload #boot-overlay,
+        body.preload #boot-overlay * {
+            animation-play-state: running !important;
+        }
+        body.preload .intro,
+        body.preload .name-main,
+        body.preload .var-line,
+        body.preload .description,
+        body.preload .home-icon-cont {
+            opacity: 0;
+        }
+
+        /* Boot overlay */
+        #boot-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #0d1117;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 2rem 2.5rem;
+            transition: opacity 500ms ease;
+        }
+        #boot-overlay.fade-out {
+            opacity: 0;
+        }
+        /* Scanline effect */
+        #boot-overlay::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+        }
+        #boot-lines {
+            max-width: 700px;
+            width: 90%;
+            text-align: left;
+            font-family: Monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            letter-spacing: 0.03em;
+            color: #e5e7eb;
+            position: relative;
+            z-index: 2;
+        }
+        #boot-lines .boot-line {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        @keyframes boot-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .boot-cursor {
+            color: #d4af72;
+            animation: boot-blink 0.7s step-end infinite;
+            font-weight: bold;
+        }
+    </style>
+
+    <!--To Prevent dark-mode flash: applying theme before first paint -->
+    <script>
+        {
+            const theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            if (theme === "dark") document.documentElement.classList.add("dark");
+        }
+    </script>
+    <script>
+        if (!sessionStorage.getItem("boot_played")) {
+            document.addEventListener("DOMContentLoaded", function() {
+                document.body.classList.add("preload");
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress-bar"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="parent">
+                <p class="nav-name">Sahej-sethi</p>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="links-parent">
+                <a class="nav-links" href="#home">Home</a>
+                <a class="nav-links" href="#about">About</a>
+                <a class="nav-links" href="#projects">Projects</a>
+                <a class="nav-links" href="#contact">Contact</a>
+                <button id="theme-toggle">
+                    <img class="theme-img" src="images/sun.webp" alt="Toggle Theme">
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Swap theme image immediately after header renders -->
+    <script>
+        if (document.documentElement.classList.contains("dark")) {
+            document.querySelector(".theme-img").src = "images/moon.webp";
+        }
+    </script>
+
+    <main>
+        <!-- Home -->
+        <section id="home">
+            <canvas id="particles-in-bg"></canvas>
+            <div class="home-left">
+                <div class="intro">Hi, I'm </div>
+                <h1 class="name-main">Sahejreet Singh</h1>
+                <div class="var-line"><span class="var-text">Aspiring Dev</span><span class="cursor"> |</span></div>
+                <p class="description">
+                    CS undergrad at IIIT Hyderabad focused on systems programming, competitive programming, and machine learning. I build low-level, performance-critical software in C++ - and I'm deeply curious about the intersection of systems engineering and quantitative finance.
+                </p>
+                <div class="home-icon-cont">
+                    <a class="social-icons" href="https://www.linkedin.com/in/sahejreet-singh-5a6821377/">
+                        <i class="fa-brands fa-linkedin fa-3x"></i>
+                    </a>
+                    <a class="social-icons" href="https://github.com/Sahej-sethi">
+                        <i class="fa-brands fa-github fa-3x"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="home-right">
+
+                <div class="terminal-card">
+
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+
+                        <span class="terminal-title">sahejreet@kernel:~</span>
+                    </div>
+
+                    <div class="terminal-body">
+                        <p><span class="prompt">sahejreet@kernel:~$</span> whoami</p>
+                        <p class="terminal-output">CSE Undergrad @ IIIT-H</p>
+
+                        <p><span class="prompt">sahejreet@kernel:~$</span> echo $INTERESTS</p>
+                        <p class="terminal-output">C++ | Systems | Quant Finance | ML</p>
+
+                        <p><span class="prompt">sahejreet@kernel:~$</span> history | tail</p>
+                        <p class="terminal-output">> building low-level systems in C++</p>
+                        <p class="terminal-output">> training neural networks from scratch</p>
+                        <p class="terminal-output">> solving codeforces problems</p>
+
+                        <p><span class="prompt">sahejreet@kernel:~$</span> status</p>
+                        <p class="terminal-output">Open to internships and research opportunities.<span class="cursor">|</span></p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about">
+            <div class="about-container">
+                <div class="about-top">
+                    <div class="about-text-content">
+                        <h2 class="about-title">About Me</h2>
+                        <p class="about-text">
+                      I'm a second-year Computer Science undergraduate at IIIT Hyderabad with a 10.0 CGPA, focused on systems programming, competitive programming, and machine learning. I spend most of my time building things in C++ — low-level, close to the metal, with a strong emphasis on correctness and performance.
+                      <br><br>
+Outside coursework, I'm drawn to problems at the intersection of systems engineering and quantitative finance — the kind where algorithmic efficiency isn't just good practice, it's the product. I compete regularly on Codeforces and work on projects that span distributed systems, collaborative editors, and ML-based financial modeling.
+                        </p>
+                    </div>
+                    <div class="about-image-cont">
+                        <img src="images/pfp.webp" alt="Sahejreet Singh" class="about-image" loading="lazy">
+                    </div>
+                </div>
+                <h3 class="git-log">$ git log --stat --oneline</h3>
+                <div class="timeline-cont">
+                    <div class="timeline-progress"></div>
+
+                    <noscript>
+                        <p class="about-text">Engineering Entrance Excellence — @ JEE 2025
+    Between 2023 and 2025, the focus was entirely on cracking India's most competitive engineering entrances. This period culminated in a CRL of 1508 in JEE Mains, 3863 in JEE Advanced, and a 95% in Class 12 Boards — results that were as much a product of disciplined problem solving under pressure as they were of raw academics. More than the ranks, this phase laid the analytical foundation that everything since has been built on.</p>
+                        <br>
+                        <p class="about-text">The Systems Journey Begins — @ IIIT Hyderabad
+    In August 2025, the transition from student to engineer began with joining the B.Tech Computer Science program at IIIT Hyderabad — an institution known for its uncompromising systems-first curriculum and strong research culture. The shift was immediate and demanding, replacing exam preparation with the deeper, open-ended challenges of actually building and understanding systems from the ground up.</p>
+                        <br>
+                        <p class="about-text">Academic Milestone: 10.0 CGPA — @ Dean's List
+    By December 2025, the first semester wrapped up with a perfect 10.0 CGPA across six courses — but the number matters less than what it represented: a genuine mastery of the foundational material. C programming, Real Analysis, Discrete Structures, and Digital Logic Design weren't just passed; they were understood deeply enough to become the bedrock for everything built since.</p>
+                        <br>
+                        <p class="about-text">
+    Systems to Full-Stack Development — @ Project Portfolio
+    Alongside coursework, the builder instinct kicked in early. From a Collaborative Notepad exploring low-level concurrency to Dusk, a full campus marketplace built with Next.js and FastAPI, the project work has deliberately spanned the full engineering stack — from manual memory management in C all the way up to scalable web architectures. The goal has always been breadth with depth, not one at the expense of the other.</p>
+                        <br>
+                        <p class="about-text">Algorithmic Rigor & CP — @ Competitive Programming
+    Running parallel to everything else is an ongoing commitment to competitive programming. With 200+ problems solved across Codeforces and CSES and a rating climbing past 1200, the focus has been on internalising Graphs, DP, and advanced data structures — not just to compete, but to build the kind of algorithmic intuition that matters in performance-critical engineering environments like high-frequency trading systems.</p>
+                        <br>
+                    </noscript>
+                </div>
+                <div class="tech-tools-cont">
+                    <h3 class="tech-title">Technology and Tools</h3>
+                    <p class="tech-desc">Tools and technologies I frequently use while building systems, ML models,
+                        and web applications.</p>
+                    <div class="stack-cont">
+                        <noscript>
+                            <p class="about-text">Python Flask HTML JavaScript C C++ Git Bash MySQL React Native Tailwind CSS</p>
+                        </noscript>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects">
+            <h2 class="projects-title">Projects</h2>
+            
+            <ul class="projects-list">
+            </ul>
+            <div class="js-disabled-project-container">
+                <noscript>
+                    <p class="about-text">Dusk — Campus Meal Marketplace
+        Dusk is a campus platform built during Hack-IIIT that lets students sell unused mess coupons and coordinate external food group orders through a collaborative ordering system. It was created to solve two recurring campus problems — wasted meal coupons and chaotic bill splitting during group food orders. The stack uses Next.js and FastAPI with PostgreSQL, though SQLite was used during development for simplicity while keeping production scalability in mind. Going forward, the project could benefit from real payment integration and a more specialized OCR model for improved receipt parsing accuracy.</p>
+                    <br>
+                    <p class="about-text">MindMeld — Collaborative Code Editor
+        MindMeld is a real-time collaborative code editor written entirely in C, featuring custom GUI rendering via Raylib, TCP socket communication, and operational transformation to keep document states synchronized across multiple clients. The motivation was to explore low-level networking, concurrency, and the collaborative editing algorithms that power tools like Google Docs. A lightweight OT model was chosen over a full CRDT system to keep the implementation understandable and performant. Future plans include a more robust OT implementation and persistent shared documents with version history.</p>
+                    <br>
+                    <p class="about-text">Twixt — Terminal Strategy Game
+        Twixt is a fully interactive terminal implementation of the classic Twixt strategy board game, built in C with real-time keyboard controls, automatic link generation, and win detection powered by DFS pathfinding. The project was an exercise in graph algorithms, geometric intersection detection, and advanced terminal rendering — deliberately avoiding a graphical interface in favour of efficient, deterministic terminal logic. Future additions could include an AI opponent using minimax or Monte Carlo tree search, as well as network multiplayer support.</p>
+                    <br>
+                    <p class="about-text">C-Unplugged — CLI Music Library Manager
+        C-Unplugged is a command-line music library manager built in C that supports album and playlist management, song playback simulation with a progress bar, and persistent storage through file I/O. It was built as a hands-on exercise in core systems programming — linked lists, command parsing, and modular design — using a custom doubly linked list instead of external libraries to reinforce data structure fundamentals. Planned improvements include shuffle mode, playlist export, and more advanced search and sorting features.</p>
+                    <br>
+                    <p class="about-text">Portfolio Website
+        This is a multi-page personal portfolio built entirely with vanilla HTML, CSS, and JavaScript — no frameworks — designed to showcase low-level and systems programming work. It features a custom typed-text component, a session-persistent reading progress tracker, an interactive project accordion, and a theme-switching system that persists across sessions. The goal was to prove that visually complex, accessible, and high-performance interfaces don't require modern framework abstractions, giving full control over the document lifecycle and motion design. The design system is built entirely on CSS Custom Properties for clean light/dark theming with zero build tooling, and future plans include a static site generator script for repetitive components and a WebGL GLSL shader background.</p>
+                </noscript>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact">
+            <div class="contact-cont">
+                <p class="get-in-touch">Get in Touch</p>
+                <h2 class="contact-title">Contact Me</h2>
+                <div class="contact-sub-cont">
+                    <div class="contact-info">
+                        <h3>Let's connect</h3>
+                        <p>I enjoy discussing ideas around systems, software engineering, and problem solving.
+                            If you'd like to collaborate, share an opportunity, or just have a conversation about
+                            technology, feel free to reach out. </p>
+                        <a href="mailto:sethidkms@gmail.com" class="contact-card">
+                            <div class="info-sub-cont">
+                                <i class="fa-regular fa-envelope"></i>
+                                <span class="info-sub2-cont">
+                                    <span class="info-key">
+                                        Email
+                                    </span>
+                                    <span class="info-value">
+                                        sethidkms@gmail.com
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                        <a href="tel:+918341175001" class="contact-card">
+                            <div class="info-sub-cont">
+                                <i class="fa-solid fa-phone"></i>
+                                <span class="info-sub2-cont">
+                                    <span class="info-key">
+                                        Phone
+                                    </span>
+                                    <span class="info-value">
+                                        +91 8341175001
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                        <a href="https://www.linkedin.com/in/sahejreet-singh-5a6821377/" aria-label="LinkedIn Profile">
+                            <div class="info-sub-cont">
+                                <i class="fa-brands fa-linkedin"></i>
+                                <span class="info-sub2-cont">
+                                    <span class="info-key">
+                                        LinkedIn
+                                    </span>
+                                    <span class="info-value">
+                                        Sahejreet-Singh
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                        <a href="https://github.com/Sahej-sethi" aria-label="GitHub Profile">
+                            <div class="info-sub-cont">
+                                <i class="fa-brands fa-github"></i>
+                                <span class="info-sub2-cont">
+                                    <span class="info-key">
+                                        GitHub
+                                    </span>
+                                    <span class="info-value">
+                                        Sahej-sethi
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contact-form">
+
+                            <label for="name">Your Name</label>
+                            <input type="text" name="name" id="name" placeholder="John Doe">
+
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="John@example.com">
+
+                            <label for="msg">Message</label>
+                            <textarea id="msg" name="msg"
+                                placeholder="Tell me about your idea or opportunity..."></textarea>
+
+                            <button type="submit" class="contact-btn">Send Message</button>
+
+                            <p id="form-status"></p>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span class="footer-glow footer-glow--right" aria-hidden="true"></span>
+        <span class="footer-glow footer-glow--left"  aria-hidden="true"></span>
+        
+        <div class="footer-inner">
+        
+            <!-- Brand + socials -->
+            <div class="footer-brand">
+            <div class="footer-brand__logo">
+                <img src="images/logo.webp" alt="SS"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <span class="footer-brand__mono" style="display:none">SS</span>
+            </div>
+            <p class="footer-brand__name">Sahejreet Singh</p>
+            <p class="footer-brand__tagline">Developer &amp; Competitive Programmer</p>
+        
+            <div class="footer-socials">
+                <a href="https://www.linkedin.com/in/sahejreet-singh-5a6821377/"
+                aria-label="LinkedIn" class="footer-social-btn footer-social-btn--li">
+                <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/Sahej-sethi"
+                aria-label="GitHub" class="footer-social-btn footer-social-btn--gh">
+                <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.instagram.com/sahej.sethii?igsh=b3g5eTVqY2NvZjlu"
+                aria-label="Instagram" class="footer-social-btn">
+                <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="mailto:sethidkms@gmail.com"
+                aria-label="Email" class="footer-social-btn">
+                <i class="fa-regular fa-envelope"></i>
+                </a>
+            </div>
+            </div>
+        
+            <!-- Navigation -->
+            <div class="footer-col">
+            <h2 class="footer-col__title">Navigation</h2>
+            <nav class="footer-col__links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            </div>
+        
+            <!-- Get in touch -->
+            <div class="footer-col">
+            <h2 class="footer-col__title">Get in Touch</h2>
+            <nav class="footer-col__links">
+                <a href="mailto:sethidkms@gmail.com">sethidkms@gmail.com</a>
+            </nav>
+            </div>
+        
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="footer-bottom">
+            <span class="footer-copy">© 2026 Sahejreet Singh. All rights reserved.</span>
+            <div class="footer-avail">
+            <span class="footer-avail__dot" aria-hidden="true"></span>
+            Available for work
+            </div>
+        </div>
+        
+    </footer>
+
+
+    <noscript>
+        <p style="text-align:center;padding:2rem;">Please enable JavaScript for the full interactive experience.</p>
+    </noscript>
+
+    <script src="js/script.js"></script>
+
+    <!-- Arch Linux boot sequence animation -->
+    <script>
+    (function() {
+        // Skip if already played this session
+        if (sessionStorage.getItem("boot_played")) {
+            document.body.classList.remove("preload");
+            return;
+        }
+
+        // Ensure preload class is set (belt-and-suspenders for sync script)
+        document.body.classList.add("preload");
+        document.body.style.overflow = "hidden";
+
+        // Create overlay
+        var overlay = document.createElement("div");
+        overlay.id = "boot-overlay";
+        var linesContainer = document.createElement("div");
+        linesContainer.id = "boot-lines";
+        overlay.appendChild(linesContainer);
+        document.body.appendChild(overlay);
+
+        // Boot lines data: [text, type, delay_ms]
+        // type: "ok", "warn", "kernel", "plain", "final"
+        var lines = [
+            ["[    0.000000] Linux 6.9.1-arch1-1 (tty1)", "kernel", 120],
+            ["[    0.000001] BIOS-provided physical RAM map:", "kernel", 80],
+            ["[    0.000183] kernel: Booting in legacy BIOS mode", "kernel", 150],
+            ["[  OK  ] Started udev Kernel Device Manager", "ok", 180],
+            ["[  OK  ] Reached target Local File Systems", "ok", 100],
+            ["[  OK  ] Started Network Time Synchronization", "ok", 140],
+            ["[  OK  ] Started User Login Management", "ok", 90],
+            ["[ WARN ] sahej-kernel: high entropy detected in /dev/projects", "warn", 200],
+            ["[  OK  ] Mounted /home/sahej", "ok", 110],
+            ["[  OK  ] Started Codeforces Rating Daemon", "ok", 160],
+            ["[  OK  ] Loaded module: mindmeld.ko (collaborative editor, OT-enabled)", "ok", 130],
+            ["[  OK  ] Loaded module: ipo_alpha.ko (XGBoost inference engine)", "ok", 100],
+            ["[ WARN ] sahej-kernel: sleep schedule suboptimal \u2014 proceeding anyway", "warn", 190],
+            ["[  OK  ] Reached target Multi-User System", "ok", 120],
+            ["[  OK  ] Started Display Manager", "ok", 80],
+            ["         Starting sahejreet.dev...", "plain", 200],
+            ["[  OK  ] sahejreet.dev \u2014 boot complete.", "final", 60]
+        ];
+
+        function colorize(text, type) {
+            if (type === "ok") {
+                return '<span style="color:#22c55e">[  OK  ]</span> ' + escapeHtml(text.substring(9));
+            }
+            if (type === "final") {
+                return '<span style="color:#22c55e">[  OK  ]</span> <span style="color:#d4af72">' + escapeHtml(text.substring(9)) + '</span>';
+            }
+            if (type === "warn") {
+                return '<span style="color:#f59e0b">[ WARN ]</span> ' + escapeHtml(text.substring(9));
+            }
+            if (type === "kernel") {
+                // Find the closing bracket
+                var bracketEnd = text.indexOf("]") + 1;
+                return '<span style="color:#d4af72">' + escapeHtml(text.substring(0, bracketEnd)) + '</span><span style="color:#9ca3af">' + escapeHtml(text.substring(bracketEnd)) + '</span>';
+            }
+            // plain
+            return '<span style="color:#e5e7eb">' + escapeHtml(text) + '</span>';
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        var currentLine = 0;
+        var cursorSpan = document.createElement("span");
+        cursorSpan.className = "boot-cursor";
+        cursorSpan.textContent = "\u2588";
+
+        function printNext() {
+            if (currentLine >= lines.length) {
+                // All lines printed — wait, blink cursor, then fade
+                setTimeout(function() {
+                    // Add blinking cursor on a new empty line
+                    var emptyLine = document.createElement("div");
+                    emptyLine.className = "boot-line";
+                    emptyLine.appendChild(cursorSpan.cloneNode(true));
+                    linesContainer.appendChild(emptyLine);
+
+                    setTimeout(function() {
+                        // Fade out overlay
+                        overlay.classList.add("fade-out");
+                        setTimeout(function() {
+                            overlay.remove();
+                            document.body.style.overflow = "";
+                            document.body.classList.remove("preload");
+                            sessionStorage.setItem("boot_played", "1");
+                        }, 500);
+                    }, 800);
+                }, 600);
+                return;
+            }
+
+            var entry = lines[currentLine];
+            var text = entry[0];
+            var type = entry[1];
+            var delay = entry[2];
+
+            // Remove cursor from previous line
+            var existingCursor = linesContainer.querySelector(".boot-cursor");
+            if (existingCursor) existingCursor.remove();
+
+            // Create new line
+            var lineDiv = document.createElement("div");
+            lineDiv.className = "boot-line";
+            lineDiv.innerHTML = colorize(text, type);
+
+            // Append blinking cursor to this line
+            lineDiv.appendChild(cursorSpan.cloneNode(true));
+            linesContainer.appendChild(lineDiv);
+
+            // Auto-scroll container
+            linesContainer.scrollTop = linesContainer.scrollHeight;
+
+            currentLine++;
+            setTimeout(printNext, delay);
+        }
+
+        // Small initial delay before boot starts
+        setTimeout(printNext, 300);
+    })();
+    </script>
+</body>
+
+</html>
