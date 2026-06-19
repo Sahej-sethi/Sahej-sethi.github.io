@@ -2167,6 +2167,10 @@ button:disabled {
         max-width: 250px;
     }
 
+    .about-image {
+    object-position: left center;
+}
+
     /* Hiding particles */
     #particles-in-bg {
         display: none;
